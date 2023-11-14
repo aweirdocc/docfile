@@ -1,0 +1,21 @@
+{
+  "name": "wee-press",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "My personal doc press",
+  "main": "index.js",
+  "author": "alilis",
+  "scripts": {
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:serve": "vitepress serve docs"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "sass": "^1.69.5",
+    "vitepress": "^1.0.0-rc.25"
+  },
+  "dependencies": {
+    "vue": "^3.3.8"
+  }
+}
