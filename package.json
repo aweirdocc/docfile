@@ -16,6 +16,7 @@
     "vitepress": "^1.0.0-rc.25"
   },
   "dependencies": {
+    "gray-matter": "^4.0.3",
     "vue": "^3.3.8"
   }
 }
