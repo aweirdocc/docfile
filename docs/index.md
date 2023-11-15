@@ -1,6 +1,6 @@
 ---
 layout: home
-titleTemplate: home
+titleTemplate: false
 
 hero:
   name: 文档知识站

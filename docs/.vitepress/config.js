@@ -1,6 +1,6 @@
 import { defineConfig } from 'vitepress';
 
-export function initNavData() {
+function initNavData() {
   const docs = initDocsSidebar();
   const firstDoc = docs.length ? docs[0] : null;
 
@@ -10,7 +10,7 @@ export function initNavData() {
   ]
 }
 
-export function initDocsSidebar() {
+function initDocsSidebar() {
   return [
     {
       text: "前端技术栈",
@@ -61,7 +61,7 @@ export default defineConfig({
   cleanUrls: true,
 
   head: [
-    ["link", { rel: "icon", href: "https://raw.githubusercontent.com/aweirdocc/docfile/main/public/favicon.png" }],
+    ["link", { rel: "icon", type: 'image/png', href: "/favicon.png" }],
     [
       "meta",
       {
@@ -81,6 +81,7 @@ export default defineConfig({
   ],
 
   themeConfig: {
+    logo: { src: '/favicon.png', width: 24, height: 24 },
     outline: [2, 5],  // 识别<h2>-<h4>的标题
     outlineTitle: '本页目录',
     lastUpdatedText: '上次更新',
