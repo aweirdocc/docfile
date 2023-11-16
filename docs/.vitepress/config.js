@@ -28,7 +28,24 @@ function initDocsSidebar() {
       text: "前端工程化",
       collapsed: false, // 可折叠
       base: '/docs/fe-engineering/',
-      items: []
+      items: [
+        {
+          text: '来吧 Vite',
+          link: 'vite'
+        },
+        {
+          text: '学会 PNPM 管理模块',
+          link: 'pnpm'
+        },
+        {
+          text: '请你搞懂 Rollup',
+          link: 'rollup'
+        },
+        {
+          text: 'package.json 真的懂了嘛',
+          link: 'package'
+        }
+      ]
     },
 
     {
@@ -53,12 +70,12 @@ function initDocsSidebar() {
 }
 
 export default defineConfig({
-  title: 'Doc Bay',
+  title: 'Docs Bay',
   description: 'Just some doc file.',
   lang: 'zh-CH',
 
   lastUpdated: true,
-  cleanUrls: true,
+  cleanUrls: false,
 
   head: [
     ["link", { rel: "icon", type: 'image/png', href: "/favicon.png" }],
