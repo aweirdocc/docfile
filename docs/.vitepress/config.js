@@ -58,7 +58,7 @@ export default defineConfig({
   lang: 'zh-CH',
 
   lastUpdated: true,
-  cleanUrls: true,
+  cleanUrls: false,
 
   head: [
     ["link", { rel: "icon", type: 'image/png', href: "/favicon.png" }],
