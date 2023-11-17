@@ -20,6 +20,10 @@ function initDocsSidebar() {
         {
           text: 'Vue3 基础',
           link: 'vue3-basic'
+        },
+        {
+          text: 'uni-app 基础',
+          link: 'uni-app'
         }
       ]
     },
@@ -30,7 +34,7 @@ function initDocsSidebar() {
       base: '/docs/fe-engineering/',
       items: [
         {
-          text: '来吧 Vite',
+          text: '一起来学 Vite 吧',
           link: 'vite'
         },
         {
@@ -38,11 +42,11 @@ function initDocsSidebar() {
           link: 'pnpm'
         },
         {
-          text: '请你搞懂 Rollup',
+          text: '搞明白 Rollup',
           link: 'rollup'
         },
         {
-          text: 'package.json 真的懂了嘛',
+          text: 'package.json 懂了嘛',
           link: 'package'
         }
       ]
