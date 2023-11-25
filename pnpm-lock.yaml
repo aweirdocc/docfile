@@ -2,12 +2,14 @@ lockfileVersion: 5.4
 
 specifiers:
   gray-matter: ^4.0.3
+  medium-zoom: ^1.1.0
   sass: ^1.69.5
   vitepress: ^1.0.0-rc.25
   vue: ^3.3.8
 
 dependencies:
   gray-matter: registry.npmmirror.com/gray-matter/4.0.3
+  medium-zoom: registry.npmmirror.com/medium-zoom/1.1.0
   vue: registry.npmmirror.com/vue/3.3.8
 
 devDependencies:
@@ -1006,6 +1008,12 @@ packages:
     name: mark.js
     version: 8.11.1
     dev: true
+
+  registry.npmmirror.com/medium-zoom/1.1.0:
+    resolution: {integrity: sha512-ewyDsp7k4InCUp3jRmwHBRFGyjBimKps/AJLjRSox+2q/2H4p/PNpQf+pwONWlJiOudkBXtbdmVbFjqyybfTmQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/medium-zoom/-/medium-zoom-1.1.0.tgz}
+    name: medium-zoom
+    version: 1.1.0
+    dev: false
 
   registry.npmmirror.com/minisearch/6.2.0:
     resolution: {integrity: sha512-BECkorDF1TY2rGKt9XHdSeP9TP29yUbrAaCh/C03wpyf1vx3uYcP/+8XlMcpTkgoU0rBVnHMAOaP83Rc9Tm+TQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/minisearch/-/minisearch-6.2.0.tgz}

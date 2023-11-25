@@ -1,6 +1,7 @@
 // import { h } from 'vue';
 import DefaultTheme from 'vitepress/theme';
-import './index.scss'
+import './index.scss';
+import ZoomImg from './components/zoomImg.vue'
 
 export default {
   ...DefaultTheme,
@@ -10,4 +11,7 @@ export default {
   //     // "aside-top": () => h(asideTop),
   //   })
   // },
+  enhanceApp({ app }) {
+    app.component('ZoomImg', ZoomImg)
+  }
 }

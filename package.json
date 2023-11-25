@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "gray-matter": "^4.0.3",
+    "medium-zoom": "^1.1.0",
     "vue": "^3.3.8"
   }
 }
