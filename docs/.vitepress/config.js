@@ -71,6 +71,10 @@ function initDocsSidebar() {
         {
           text: '八股文',
           link: 'interview-post'
+        },
+        {
+          text: 'Awesome libs',
+          link: 'libs'
         }
       ]
     },
