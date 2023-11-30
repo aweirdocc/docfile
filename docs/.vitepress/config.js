@@ -48,6 +48,10 @@ function initDocsSidebar() {
         {
           text: 'package.json 懂了嘛',
           link: 'package'
+        },
+        {
+          text: '浅尝一下 tsup',
+          link: 'tsup'
         }
       ]
     },
