@@ -82,8 +82,8 @@ function initDocsSidebar() {
 }
 
 export default defineConfig({
-  title: 'Docs Bay',
-  description: 'Just some doc file.',
+  title: 'Alilis的知识库',
+  description: '本站是Alilis创建的一个知识库，会将日常学习的笔记整理上传在这里，主要会包含前端、计算机基础和技术相关的知识总结。',
   lang: 'zh-CH',
 
   lastUpdated: true,
@@ -99,7 +99,10 @@ export default defineConfig({
           "width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no",
       },
     ],
-    ["meta", { name: "keywords", content: "alilis的个人文档站" }],
+    ["meta", { name: "keywords", content: "Alilis,知识库,前端,计算机基础" }],
+    ["meta", { property: "og:url", content: "https://docs.alilis.space" }],
+    ["meta", { property: "og:title", content: "Alilis的知识库" }],
+    ["meta", { property: "og:description", content: "本站是Alilis创建的一个知识库，会将日常学习的笔记整理上传在这里，主要会包含前端、计算机基础和技术相关的知识总结。" }],
 
     // 引入 Gitalk
     // [
@@ -114,7 +117,7 @@ export default defineConfig({
     outline: [2, 5],  // 识别<h2>-<h4>的标题
     outlineTitle: '本页目录',
     lastUpdatedText: '上次更新',
-    author: "alilis",
+    author: "Alilis",
 
     search: {
       provider: "local",
@@ -137,6 +140,10 @@ export default defineConfig({
     socialLinks: [
       { icon: 'github', link: 'https://github.com/aweirdocc' },
     ],
+  },
+
+  sitemap: {
+    hostname: 'https://docs.alilis.space'
   },
 
   ignoreDeadLinks: true
