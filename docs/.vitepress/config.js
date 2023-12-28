@@ -24,6 +24,10 @@ function initDocsSidebar() {
         {
           text: 'uni-app 基础',
           link: 'uni-app'
+        },
+        {
+          text: 'TypeScript 手册',
+          link: 'typescript'
         }
       ]
     },

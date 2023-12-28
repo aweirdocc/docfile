@@ -71,6 +71,21 @@ const { importModule } = await importModule('local-pkg')
 
 ## Utils
 
+### 1. flglet.js
+
+快速生成`ASCII`艺术字
+```bash
+     _    _ _ _ _     _       ____                 
+    / \  | (_) (_)___( )___  |  _ \  ___   ___ ___ 
+   / _ \ | | | | / __|// __| | | | |/ _ \ / __/ __|
+  / ___ \| | | | \__ \ \__ \ | |_| | (_) | (__\__ \
+ /_/   \_\_|_|_|_|___/ |___/ |____/ \___/ \___|___/
+```
+
+### 2. Chokidar
+
+它用来监听文件变化，这里是它的[官网地址](https://github.com/paulmillr/chokidar)。Vite中有使用到。
+
 
 
 ## Vue
