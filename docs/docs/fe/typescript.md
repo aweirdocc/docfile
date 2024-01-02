@@ -125,8 +125,8 @@ tsc --noEmit app.ts
 # 使用 tsconfig.json 的配置
 $ tsc
 
-# 只编译 index.ts
-$ tsc index.ts
+# 只编译 index.ts， 此时会忽略tsconfig.json文件配置
+$ tsc index.ts 
 
 # 编译 src 目录的所有 .ts 文件
 $ tsc src/*.ts
@@ -422,6 +422,256 @@ TypeScript 内置的类型描述文件，主要有以下一些，完整的清单
 ```
 
 这是我暂时自用的一个配置，具体使用查看[这里](https://www.npmjs.com/package/@weebat/tsconfig)。
+
+
+
+## TypeScript 模块与解析
+
+### 模块导入与导出
+
+任何包含 import 或 export 语句的文件，就是一个模块（module）。模块本身就是一个作用域，不属于全局作用域。模块内部的变量、函数、类只在内部可见，对于模块外部是不可见的。
+
+为了区分类型和变量，TypeScript 引入了两个解决方法。
+
+第一个方法是在 import 语句输入的类型前面加上`type`关键字。
+
+```typescript
+import { type A, a } from './a';
+```
+
+第二个方法是使用`import type` 语句，这个语句只能输入类型，不能输入正常接口。
+
+```typescript
+// 正确
+import type { A } from './a';
+
+// 报错
+import type { a } from './a';
+```
+
+同样的，export 语句也有两种方法，表示输出的是类型。
+
+```typescript
+type A = 'a';
+type B = 'b';
+
+// 方法一
+export {type A, type B};
+
+// 方法二
+export type {A, B};
+```
+
+TypeScript 还允许使用`import * as [接口名] from "模块文件"`输入 CommonJS 模块。
+
+```typescript
+import * as fs from 'fs';
+// 等同于
+import fs = require('fs');
+```
+
+
+
+### 模块定位
+
+模块定位是用来确定 import 语句和 export 语句里面的模块文件位置。编译参数`moduleResolution`，用来指定具体使用哪一种定位算法。常用的算法有两种：`Classic`和`Node`。
+
+```typescript
+// 相对模块
+import { TypeA } from './a';
+
+// 非相对模块
+import * as $ from "jquery";
+```
+
+加载模块时，目标模块分为**相对模块**和**非相对模块**两种。
+
+相对模块指的是路径以`/`、`./`、`../`开头的模块。相对模块的定位，是根据**当前脚本的位置**进行计算的。
+
+- `import Entry from "./components/Entry";`
+- `import { DefaultHeaders } from "../constants/http";`
+- `import "/mod";`
+
+非相对模块指的是不带有路径信息的模块。由`baseUrl`属性或模块映射而确定的，通常用于加载外部模块。
+
+- `import * as $ from "jquery";`
+- `import { Component } from "@angular/core";`
+
+#### Classic 方法
+
+相对模块以当前脚本的路径，查找`b.ts`和`b.d.ts`。
+
+非相对模块一层层查找上级目录中是否存在b.ts`和`b.d.ts`。
+
+
+
+#### Node 方法
+
+Node 方法就是模拟 Node.js 的模块加载方法，也就是`require()`的实现方法。
+
+计算相对模块的位置，如果当前路径`/root/a`有文件导入`let x = require("./b");`：
+
+- 首先寻找 `/root/a/b.ts` 是否存在，如果存在使用该文件。
+- 其次寻找 `/root/a/b.tsx` 是否存在，如果存在使用该文件。
+- **其次寻找 `/root/a/b.d.ts` 是否存在，如果存在使用该文件。**
+- 其次寻找 `/root/a/b/package.json`， 如果 package.json 中指定了一个`types`属性的话那么会返回该文件。
+- 如果上述仍然没有找到，会查找`/root/a/b/index.ts`，`/root/a/b/index.tsx`，`/root/a/b/index.d.ts`
+
+----
+
+
+
+非相对模块则是以当前脚本的路径作为起点，逐级向上层目录查找是否存在子目录`node_modules`。
+
+- 当前目录的子目录`node_modules`是否包含`b.ts`、`b.tsx`、`b.d.ts`。
+- 当前目录的子目录`node_modules`，是否存在文件`package.json`，该文件的`types`字段是否指定了入口文件，如果是的就加载该文件。
+- 当前目录的子目录`node_modules`里面，是否包含子目录`@types`，在该目录中查找文件`b.d.ts`。
+- 当前目录的子目录`node_modules`里面，是否包含子目录`b`，在该目录中查找`index.ts`、`index.tsx`、`index.d.ts`。
+- 进入上一层目录，重复上面4步，直到找到为止。
+
+
+
+### 路径映射
+
+#### baseUrl
+
+`baseUrl`用来手动指定脚本模块的基准目录，当`baseUrl`是一个`.`，表示基准目录就是`tsconfig.json`所在的目录。
+
+```json
+{
+  "compilerOptions": {
+    "baseUrl": "."
+  }
+}
+```
+
+#### path
+
+`paths`字段指定非相对路径的模块与实际脚本的映射。
+
+```json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "jquery": ["node_modules/jquery/dist/jquery"]
+    }
+  }
+}
+```
+
+加载模块`jquery`时，实际加载的脚本是`node_modules/jquery/dist/jquery`，它的位置要根据`baseUrl`字段计算得到。可以指定多个路径，当第一个路径不存在，那么就加载后一个，以此类推。
+
+
+
+### 声明文件`*.d.ts`
+
+类型声明文件里面只有类型代码，没有具体的代码实现。
+
+类型声明文件也可以包括在项目的 tsconfig.json 文件里面，这样的话，编译器打包项目时，会自动将类型声明文件加入编译，而不必在每个脚本里面加载类型声明文件。
+
+```json
+{
+  "compilerOptions": {},
+  "files": [
+    "src/index.ts",
+    "typings/moment.d.ts"
+  ]
+}
+```
+
+类型声明文件主要有以下三种来源。
+
+- TypeScript 编译器自动生成。
+- TypeScript 内置类型文件。
+- 外部模块的类型声明文件，需要自己安装。
+
+TypeScript 会自动加载`node_modules/@types`目录下的模块，但可以使用编译选项`typeRoots`改变这种行为。
+
+```json
+{
+  "compilerOptions": {
+    "typeRoots": ["./typings", "./vendor/types"]
+  }
+}
+```
+
+上面示例表示，TypeScript 不再去`node_modules/@types`目录，而是去跟当前`tsconfig.json`同级的`typings`和`vendor/types`子目录，加载类型模块了。
+
+默认情况下，TypeScript 会自动加载`typeRoots`目录里的所有模块，编译选项`types`可以指定加载哪些模块。
+
+```json
+{
+  "compilerOptions": {
+    "types" : ["jquery"]
+  }
+}
+```
+
+----
+
+
+
+类型声明文件里面，变量的类型描述必须使用`declare`命令，否则会报错。
+
+- **`declare var`** 声明全局变量
+- **`declare function`** 声明全局方法
+- **`declare class`** 声明全局类
+- **`declare enum`** 声明全局枚举类型
+- **`declare namespace`** 声明（含有子属性的）全局对象
+- **`interface 和 type`** 声明全局类型
+
+**使用 `declare` 不再会声明一个全局变量，而只会在当前文件中声明一个局部变量。**
+
+```typescript
+// types.d.ts
+declare let foo:string;
+
+interface Foo {} // 正确
+declare interface Foo {} // 正确
+
+export interface Data {
+  version: string;
+}
+```
+
+
+
+### 三斜杠命令
+
+ `/// <reference path="" />`
+
+告诉编译器在编译时需要包括的文件，经常用来声明当前脚本依赖的类型文件。
+
+注意： `path`参数必须指向一个存在的文件，若文件不存在会报错。`path`参数不允许指向当前文件。
+
+---
+
+
+
+ `/// <reference types="" />`
+
+告诉编译器当前脚本依赖某个 DefinitelyTyped 类型库
+
+```typescript
+/// <reference types="node" />
+```
+
+表示编译时添加 Node.js 的类型库，实际添加的脚本是`node_modules`目录里面的`@types/node/index.d.ts`。只应该用在`.d.ts`文件中。
+
+----
+
+
+
+`/// <reference lib="..." />`
+
+显式包含内置 lib 库，等同于在`tsconfig.json`文件里面使用`lib`属性指定 lib 库。
+
+```typescript
+/// <reference lib="es2017.string" />
+```
+
+`es2017.string`对应的库文件就是`lib.es2017.string.d.ts`。
 
 
 
