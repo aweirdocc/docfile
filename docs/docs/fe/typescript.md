@@ -675,6 +675,176 @@ export interface Data {
 
 
 
+## 类型系统
+
+### any & unknow & never
+
+`any` 类型表示没有任何限制，该类型的变量可以赋予任意类型的值。它会“污染”其他变量，导致其他变量出错。
+
+```typescript
+let x:any = 'hello';
+let y:number;
+
+y = x; // 不报错
+
+y * 123 // 不报错
+y.toFixed() // 不报错
+```
+
+
+
+`unknow` 表示类型不确定，可能是任意类型。`unknow` 不能直接调用`unknown`类型变量的方法和属性。
+
+```typescript
+let v1:unknown = { foo: 123 };
+v1.foo  // 报错
+
+let v2:unknown = 'hello';
+v2.trim() // 报错
+```
+
+
+
+`never` 类型为空，不包含任何值。不可能赋给它任何值，否则都会报错，但可以赋值给任意其他类型。
+
+```typescript
+function f():never {
+  throw new Error('Error');
+}
+
+let v1:number = f(); // 不报错
+let v2:string = f(); // 不报错
+```
+
+**空集是任何集合的子集**。TypeScript 有两个“顶层类型”（`any`和`unknown`），但是“底层类型”只有`never`唯一一个。
+
+
+
+### 基本类型
+
+TypeScript 继承了 JavaScript 的8种类型设计：
+
+- boolean
+- string
+- number
+- bigint
+- symbol
+- object
+- undefined
+- null
+
+undefined 和 null 既可以作为值，也可以作为类型，取决于在哪里使用它们。**任何其他类型的变量都可以赋值为`undefined`或`null`**。
+
+```typescript
+let age:number = 24;
+
+age = null;      // 正确
+age = undefined; // 正确
+```
+
+
+
+原始类型的值，都有对应的包装对象。只有当作构造函数使用时，才会返回包装对象。
+
+- `Boolean()`
+- `String()`
+- `Number()`
+
+以上三个构造函数，执行后可以直接获取某个原始类型值的包装对象。
+
+```typescript
+const s1:String = 'hello'; // 正确
+const s2:String = new String('hello'); // 正确
+
+const s3:string = 'hello'; // 正确
+const s4:string = new String('hello'); // 报错
+```
+
+
+
+### 值类型
+
+单个值也是一种类型，称为“值类型”；
+
+```typescript
+let x:'hello';
+
+x = 'hello'; // 正确
+x = 'world'; // 报错
+```
+
+**TypeScript 推断类型时，遇到`const`命令声明的变量，如果代码里面没有注明类型，就会推断该变量是值类型。**
+
+```ts
+// x 的类型是 "https"
+const x = 'https';
+```
+
+如果赋值为对象，并不会推断为值类型。
+
+```ts
+// x 的类型是 { foo: number }
+const x = { foo: 1 };
+```
+
+**父类型不能赋值给子类型，但反过来是可以的**。
+
+```ts
+// 等号右侧4 + 1的类型，TypeScript 推测为number。
+// number是5的父类型, 所以会报错
+const x:5 = 4 + 1; 
+```
+
+
+
+### 联合类型
+
+联合类型是指多个类型组成的一个新类型，使用符号`|`表示。
+
+联合类型`A|B`表示，任何一个类型只要属于`A`或`B`，就属于联合类型`A|B`。
+
+联合类型可以与值类型相结合，表示一个变量的值有若干种可能。
+
+```ts
+let setting:true|false;
+
+let gender:'male'|'female';
+```
+
+如果一个变量有多种类型，读取该变量时，往往需要进行“类型区分”，否则会导致报错。
+
+```ts
+function printId(
+  id:number|string
+) {
+  if (typeof id === 'string') {
+    console.log(id.toUpperCase());
+  } else {
+    console.log(id);
+  }
+}
+```
+
+根据不同的值类型，返回不同的结果。
+
+
+
+### 交叉类型
+
+交叉类型指多个类型组成的一个新类型，使用符号`&`表示。
+
+交叉类型`A&B`表示，任何一个类型必须同时属于`A`和`B`，才属于交叉类型`A&B`，即交叉类型同时满足`A`和`B`的特征。**交叉类型常常用来为对象类型添加新属性。**
+
+```ts
+type A = { foo: number };
+
+type B = A & { bar: number };
+```
+
+类型`B`在`A`的基础上增加了属性`bar`。
+
+
+
 ## 参考文档
 
 - [TypeScript官方中文文档](https://www.tslang.cn/docs/handbook/basic-types.html)
