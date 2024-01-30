@@ -71,7 +71,7 @@ const { importModule } = await importModule('local-pkg')
 
 ## Utils
 
-### 1. flglet.js
+### 1. [flglet.js](https://github.com/scottgonzalez/figlet-js)
 
 快速生成`ASCII`艺术字
 ```bash
@@ -82,9 +82,27 @@ const { importModule } = await importModule('local-pkg')
  /_/   \_\_|_|_|_|___/ |___/ |____/ \___/ \___|___/
 ```
 
-### 2. Chokidar
+### 2. [Chokidar](https://github.com/paulmillr/chokidar)
 
-它用来监听文件变化，这里是它的[官网地址](https://github.com/paulmillr/chokidar)。Vite中有使用到。
+它用来监听文件变化。Vite中有使用到。
+
+
+
+### 3. [photoswipe](https://github.com/dimsemenov/photoswipe)
+
+PhotoSwipe 是专为移动触摸设备设计的图片预览插件
+
+
+
+### 4. [qrcodejs](https://github.com/davidshimjs/qrcodejs)
+
+QRCode.js 是用于制作 QRCode 的 javascript 库。
+
+
+
+### 5. [copy-to-clipboard](https://github.com/sudodoki/copy-to-clipboard)
+
+将内容从浏览器复制到剪贴板
 
 
 
