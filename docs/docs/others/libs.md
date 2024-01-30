@@ -104,6 +104,9 @@ QRCode.js 是用于制作 QRCode 的 javascript 库。
 
 将内容从浏览器复制到剪贴板
 
+### 6. [jsdiff](https://github.com/kpdecker/jsdiff)
+
+实现文本差异对比
 
 
 ## CSS 
