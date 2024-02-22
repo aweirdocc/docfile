@@ -845,6 +845,583 @@ type B = A & { bar: number };
 
 
 
+### 类型工具
+
+#### Exclude
+
+`Exclude<UnionType, ExcludedMembers>`用来从联合类型`UnionType`里面，删除某些类型`ExcludedMembers`，组成一个新的类型返回。
+
+```ts
+type T1 = Exclude<'a'|'b'|'c', 'a'>; // 'b'|'c'
+type T2 = Exclude<'a'|'b'|'c', 'a'|'b'>; // 'c'
+type T3 = Exclude<string|(() => void), Function>; // string
+type T4 = Exclude<string | string[], any[]>; // string
+type T5 = Exclude<(() => void) | null, Function>; // null
+type T6 = Exclude<200 | 400, 200 | 201>; // 400
+type T7 = Exclude<number, boolean>; // number
+```
+
+`Exclude<T, U>`就相当于删除兼容的类型，剩下不兼容的类型。
+
+----
+
+
+
+#### Extract
+
+`Extract<UnionType, Union>`用来从联合类型`UnionType`之中，提取指定类型`Union`，组成一个新类型返回。
+
+```ts
+type T1 = Extract<'a'|'b'|'c', 'a'>; // 'a'
+type T2 = Extract<'a'|'b'|'c', 'a'|'b'>; // 'a'|'b'
+type T3 = Extract<'a'|'b'|'c', 'a'|'d'>; // 'a'
+type T4 = Extract<200 | 400, 200 | 201>; // 200
+```
+
+如果参数类型`Union`不包含在联合类型`UnionType`之中，则返回`never`类型。
+
+```ts
+type T = Extract<string|number, boolean>; // never
+```
+
+----
+
+
+
+#### InstanceType
+
+`InstanceType<Type>`提取构造函数的返回值的类型，等同于构造函数的`ReturnType<Type>`。
+
+```ts
+type T = InstanceType<
+  new () => object
+>; // object
+```
+
+由于 Class 作为类型，代表实例类型。要获取它的构造方法，必须把它当成值，然后用`typeof`运算符获取它的构造方法类型。
+
+```ts
+class C {
+  x = 0;
+  y = 0;
+}
+
+type T = InstanceType<typeof C>; // C
+```
+
+`typeof C`是`C`的构造方法类型，然后 InstanceType 就能获得实例类型，即`C`本身。如果类型参数不是构造方法，就会报错。
+
+如果类型参数是`any`或`never`两个特殊值，分别返回`any`和`never`。
+
+```ts
+type T1 = InstanceType<any>; // any
+
+type T2 = InstanceType<never>; // never
+```
+
+---
+
+
+
+#### NonNullable
+
+`NonNullable<Type>`用来从联合类型`Type`删除`null`类型和`undefined`类型，组成一个新类型返回。
+
+```ts
+// string|number
+type T1 = NonNullable<string|number|undefined>;
+
+// string[]
+type T2 = NonNullable<string[]|null|undefined>;
+type T3 = NonNullable<number|null>; // number
+type T4 = NonNullable<string|undefined>; // string
+type T5 = NonNullable<null|undefined>; // never
+```
+
+等同于求`T & Object`的交叉类型，由于 TypeScript 的非空值都属于`Object`的子类型，所以会返回自身；而`null`和`undefined`不属于`Object`，会返回`never`类型。
+
+----
+
+
+
+#### Omit
+
+`Omit<Type, Keys>`用来从对象类型`Type`中，删除指定的属性`Keys`，组成一个新的对象类型返回。
+
+```ts
+interface A {
+  x: number;
+  y: number;
+}
+
+type T1 = Omit<A, 'x'>;       // { y: number }
+type T2 = Omit<A, 'y'>;       // { x: number }
+type T3 = Omit<A, 'x' | 'y'>; // { }
+```
+
+指定删除的键名`Keys`可以是对象类型`Type`中不存在的属性，但必须兼容`string|number|symbol`。
+
+----
+
+
+
+#### Partial
+
+`Partial<Type>`返回一个新类型，将参数类型`Type`的所有属性变为可选属性。
+
+```ts
+interface A {
+  x: number;
+  y: number;
+}
+ 
+type T = Partial<A>; // { x?: number; y?: number; }
+```
+
+---
+
+
+
+#### Required
+
+`Required<Type>`返回一个新类型，将参数类型`Type`的所有属性变为必选属性。它与`Partial<Type>`的作用正好相反。
+
+```ts
+interface A {
+  x?: number;
+  y: number;
+}
+
+type T = Required<A>; // { x: number; y: number; }
+```
+
+具体实现：
+
+```ts
+type Required<T> = {
+  [P in keyof T]-?: T[P];
+};
+```
+
+---
+
+
+
+#### Pick
+
+`Pick<Type, Keys>`返回一个新的对象类型，第一个参数`Type`是一个对象类型，第二个参数`Keys`是`Type`里面被选定的键名。
+
+```ts
+interface A {
+  x: number;
+  y: number;
+}
+
+type T1 = Pick<A, 'x'>; // { x: number }
+type T2 = Pick<A, 'x'|'y'>;  // { x: number; y: number }
+```
+
+指定的键名`Keys`必须是对象键名`Type`里面已经存在的键名，否则会报错。
+
+---
+
+
+
+#### Record
+
+`Record<Keys, Type>`返回一个对象类型，参数`Keys`用作键名，参数`Type`用作键值类型。
+
+```ts
+// { a: number }
+type T = Record<'a', number>;
+```
+
+参数`Keys`可以是联合类型，这时会依次展开为多个键。
+
+```ts
+// { a: number, b: number }
+type T = Record<'a'|'b', number>;
+```
+
+如果参数`Type`是联合类型，就表明键值是联合类型。
+
+```ts
+// { a: number|string }
+type T = Record<'a', number|string>;
+```
+
+参数`Keys`的类型必须兼容`string|number|symbol`，否则不能用作键名，会报错。
+
+----
+
+
+
+#### Readonly
+
+`Readonly<Type>`返回一个新类型，将参数类型`Type`的所有属性变为只读属性。
+
+```ts
+interface A {
+  x: number;
+  y?: number;
+}
+
+// { readonly x: number; readonly y?: number; }
+type T = Readonly<A>;
+```
+
+具体实现：
+
+```ts
+type Readonly<T> = {
+  +readonly [P in keyof T]: T[P];
+};
+```
+
+可以自定义类型工具`Mutable<Type>`，将参数类型的所有属性变成可变属性。
+
+```ts
+type Mutable<T> = {
+  -readonly [P in keyof T]: T[P];
+};
+```
+
+`+readonly`就表示增加只读标志，等同于`readonly`。
+
+----
+
+
+
+#### ReturnType
+
+`ReturnType<Type>`提取函数类型`Type`的返回值类型，作为一个新类型返回。
+
+```ts
+type T1 = ReturnType<() => string>; // string
+
+type T2 = ReturnType<() => {
+  a: string; b: number
+}>; // { a: string; b: number }
+
+type T3 = ReturnType<(s:string) => void>; // void
+
+type T4 = ReturnType<() => () => any[]>; // () => any[]
+
+type T5 = ReturnType<typeof Math.random>; // number
+
+type T6 = ReturnType<typeof Array.isArray>; // boolean
+```
+
+如果参数类型是泛型函数，返回值取决于泛型类型。如果泛型不带有限制条件，就会返回`unknown`。
+
+```ts
+type T1 = ReturnType<<T>() => T>; // unknown
+```
+
+如果类型不是函数，会报错。
+
+```ts
+type T1 = ReturnType<boolean>; // 报错
+```
+
+如果类型是`any`和`never`两个特殊值，会分别返回`any`和`never`。
+
+----
+
+
+
+#### Uppercase
+
+`Uppercase<StringType>`将字符串类型的每个字符转为大写。
+
+---
+
+
+
+#### Lowercase
+
+`Lowercase<StringType>`将字符串的每个字符转为小写。
+
+----
+
+
+
+#### Capitalize
+
+`Capitalize<StringType>`将字符串的第一个字符转为大写。
+
+---
+
+
+
+#### Uncapitalize
+
+`Uncapitalize<StringType>` 将字符串的第一个字符转为小写。
+
+
+
+## interface
+
+`interface` 可以看作是一种类型约定，中文译为“接口”。它可以表示对象的各种语法，它的成员有5种形式。
+
+（1） 对象属性
+
+```ts
+interface Point {
+  x: number;
+  y: number;
+}
+```
+
+如果属性是只读的，需要加上`readonly`修饰符。
+
+（2）对象的属性索引
+
+```ts
+interface A {
+  [prop: string]: number;
+}
+```
+
+表示属性名只要是字符串，都符合类型要求。属性索引共有`string`、`number`和`symbol`三种类型。一个接口中最多只能定义一个数值索引。
+
+（3）对象的方法
+
+```ts
+// 写法一
+interface A {
+  f(x: boolean): string;
+}
+
+// 写法二
+interface B {
+  f: (x: boolean) => string;
+}
+```
+
+其中类型方法可以重载，interface 里面的函数重载，不需要给出实现，需要额外在对象外部给出函数方法的实现。
+
+（4）函数
+
+interface 也可以用来声明独立的函数。
+
+```ts
+interface Add {
+  (x:number, y:number): number;
+}
+
+const myAdd:Add = (x,y) => x + y;
+```
+
+接口`Add`声明了一个函数类型。
+
+（5）构造函数
+
+```ts
+interface ErrorConstructor {
+  new (message?: string): Error;
+}
+```
+
+interface 内部可以使用`new`关键字，表示构造函数。
+
+---
+
+
+
+### interface的继承
+
+#### 继承interface
+
+interface 可以使用`extends`关键字，继承其他 interface。
+
+```ts
+interface Shape {
+  name: string;
+}
+
+interface Circle extends Shape {
+  radius: number;
+}
+```
+
+`extends`关键字会从继承的接口里面拷贝属性类型，这样就不必书写重复的属性，并且允许多重继承。
+
+:::info
+
+注意，子接口与父接口的同名属性必须是类型兼容的，不能有冲突，否则会报错。
+
+多重继承时，如果多个父接口存在同名属性，那么这些同名属性不能有类型冲突，否则会报错。
+
+:::
+
+#### 继承type
+
+interface 可以继承`type`命令定义的对象类型。
+
+```ts
+type Person = {
+    name: string;
+    age: number;
+}
+
+interface Kid extends Person {
+    hobbies: string[];
+}
+```
+
+:::info
+
+注意，如果`type`命令定义的类型不是对象，interface 就无法继承。
+
+:::
+
+
+
+#### 继承 class
+
+继承 class，继承该类的所有成员。
+
+```ts
+class A {
+  x:string = '';
+
+  y():boolean {
+    return true;
+  }
+}
+
+interface B extends A {
+  z: number
+}
+```
+
+`B`继承了`A`，因此`B`就具有属性`x`、`y()`和`z`。
+
+
+
+### interface 合并
+
+多个同名接口会合并成一个接口。
+
+```ts
+interface Box {
+  height: number;
+  width: number;
+}
+
+interface Box {
+  length: number;
+}
+```
+
+日常开发中经常会对`window`对象和`document`对象添加自定义属性，但是 TypeScript 会报错，因为原始定义没有这些属性。解决方法就是把自定义属性写成 interface，合并进原始定义。
+
+```ts
+interface Document {
+  foo: string;
+}
+
+document.foo = 'hello';
+```
+
+同名接口合并时，同一个属性如果有多个类型声明，彼此不能有类型冲突。
+
+
+
+### interface 与 type 的异同
+
+很多对象类型既可以用 interface 表示，也可以用 type 表示。几乎所有的 interface 命令都可以改写为 type 命令。
+
+interface 与 type 的区别有下面几点。
+
+（1）`type`能够表示非对象类型，而`interface`只能表示对象类型（包括数组、函数等）。
+
+（2）`interface`可以继承其他类型，`type`不支持继承。
+
+`type`定义的对象类型如果想要添加属性，只能使用`&`运算符，重新定义一个类型。
+
+```ts
+type Animal = {
+  name: string
+}
+
+type Bear = Animal & {
+  honey: boolean
+}
+```
+
+类型`Bear`在`Animal`的基础上添加了一个属性`honey`。
+
+继承时，type 和 interface 是可以换用的。interface 可以继承 type。type 也可以继承 interface。
+
+```ts
+interface Foo {
+  x: number;
+}
+
+type Bar = Foo & { y: number; };
+```
+
+（3）同名`interface`会自动合并，同名`type`则会报错。
+
+```ts
+type A = { foo:number }; // 报错
+type A = { bar:number }; // 报错
+```
+
+
+
+（4）`interface`不能包含属性映射（mapping）。
+
+```ts
+interface Point {
+  x: number;
+  y: number;
+}
+
+// 正确
+type PointCopy1 = {
+  [Key in keyof Point]: Point[Key];
+};
+```
+
+
+
+（5）`this`关键字只能用于`interface`。
+
+```ts
+// 正确
+interface Foo {
+  add(num:number): this;
+};
+
+// 报错
+type Foo = {
+  add(num:number): this;
+};
+```
+
+
+
+（6）type 可以扩展原始数据类型，interface 不行。
+
+```ts
+// 正确
+type MyStr = string & {
+  type: 'new'
+};
+
+// 报错
+interface MyStr extends string {
+  type: 'new'
+}
+```
+
+
+
+
+
 ## 参考文档
 
 - [TypeScript官方中文文档](https://www.tslang.cn/docs/handbook/basic-types.html)

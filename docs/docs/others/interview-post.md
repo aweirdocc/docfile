@@ -72,6 +72,36 @@ bark.animal = 'dog' // 可以正常执行
 
 ## Vue
 
+### Vue3  与 Vue2 版本的优化？
+
+Vue提供的SFC单文件模板是会被编译为一个渲染函数的, 这个渲染函数最终返回的就是vDOM，然后进行渲染创建真实DOM。
+
+在vue2中的渲染原理, 都是静态编译我们的模板, 但是有一个致命的缺点: **静态内容也会被重新diff**。
+
+而在vue3中采用了`PacthFlag`去给这段vDOM子节点标注类型, 让其在diff期间主动跳过. 关于PacthFlag它在vue源码中是一个枚举, 定义了很多标识, 它们都有一个共同点就是都是位运算, 在diff运行时其实表现的性能消耗非常小
+
+```ts
+export const enum PatchFlags {
+  TEXT = 1,// 动态的文本节点
+  CLASS = 1 << 1,  // 2 动态的 class
+  STYLE = 1 << 2,  // 4 动态的 style
+  PROPS = 1 << 3,  // 8 动态属性，不包括类名和样式
+  FULL_PROPS = 1 << 4,  // 16 动态 key，当 key 变化时需要完整的 diff 算法做比较
+  HYDRATE_EVENTS = 1 << 5,  // 32 表示带有事件监听器的节点
+  STABLE_FRAGMENT = 1 << 6,   // 64 一个不会改变子节点顺序的 Fragment
+  KEYED_FRAGMENT = 1 << 7, // 128 带有 key 属性的 Fragment
+  UNKEYED_FRAGMENT = 1 << 8, // 256 子节点没有 key 的 Fragment
+  NEED_PATCH = 1 << 9,   // 512
+  DYNAMIC_SLOTS = 1 << 10,  // 动态 solt
+  HOISTED = -1,  // 特殊标志是负整数表示永远不会用作 diff
+  BAIL = -2 // 一个特殊的标志，指代差异算法
+}
+```
+
+其次在vue3中，会将静态内容提升以及树结构打平，监听函数事件缓存，会减少了很多内存占用。
+
+---
+
 ### 为什么 Vue3 使用 Proxy API ？  
 
 1. **性能提升**：`Object.defineProperty` 方法来拦截对象属性的访问和修改，但它需要遍历每个属性进行拦截。而 `Proxy API` 允许**拦截整个对象**，可以更高效地捕获对对象的访问和修改。
