@@ -93,11 +93,9 @@ const { importModule } = await importModule('local-pkg')
 PhotoSwipe 是专为移动触摸设备设计的图片预览插件
 
 
-
 ### 4. [qrcodejs](https://github.com/davidshimjs/qrcodejs)
 
 QRCode.js 是用于制作 QRCode 的 javascript 库。
-
 
 
 ### 5. [copy-to-clipboard](https://github.com/sudodoki/copy-to-clipboard)
@@ -108,6 +106,9 @@ QRCode.js 是用于制作 QRCode 的 javascript 库。
 
 实现文本差异对比
 
+### 7. [blueimp-md5](https://www.npmjs.com/package/blueimp-md5)
+
+轻量级 MD5 哈希值的计算库
 
 ## CSS 
 
