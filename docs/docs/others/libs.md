@@ -67,7 +67,23 @@ resolveModule('local-pkg')
 const { importModule } = await importModule('local-pkg')
 ```
 
+## JS
 
+### 1. [pako](https://github.com/nodeca/pako)
+
+一个用于数据压缩和解压缩的 JavaScript 库，特别适用于处理 GZIP 格式的数据。
+
+### 2. [pdf.js](https://github.com/mozilla/pdf.js)
+
+一个用 HTML5 构建的PDF查看器。
+
+### 3. [vfx-js](https://github.com/fand/vfx-js)
+
+一个用于在网页上添加 WebGL 驱动的视觉效果的 JavaScript 库
+
+### 4. [highlight.js](https://github.com/highlightjs/highlight.js)
+
+语法高亮器
 
 ## Utils
 
@@ -86,17 +102,13 @@ const { importModule } = await importModule('local-pkg')
 
 它用来监听文件变化。Vite中有使用到。
 
-
-
 ### 3. [photoswipe](https://github.com/dimsemenov/photoswipe)
 
 PhotoSwipe 是专为移动触摸设备设计的图片预览插件
 
-
 ### 4. [qrcodejs](https://github.com/davidshimjs/qrcodejs)
 
 QRCode.js 是用于制作 QRCode 的 javascript 库。
-
 
 ### 5. [copy-to-clipboard](https://github.com/sudodoki/copy-to-clipboard)
 
@@ -110,13 +122,33 @@ QRCode.js 是用于制作 QRCode 的 javascript 库。
 
 轻量级 MD5 哈希值的计算库
 
+### 8. [QRBTF](https://github.com/latentcat/qrbtf)
+
+第一个也是最好的人工智能和参数二维码生成器
+
+### 9. [wangEditor 5](https://github.com/wangeditor-team/wangEditor)
+
+开源 Web 富文本编辑器
+
+### 10. [pinyin-pro](https://github.com/zh-lx/pinyin-pro)
+
+汉字拼音转换库
+
 ## CSS 
 
 ### 1. Tween.js
 
 用来处理补间动画，具体使用参考[中文文档](https://github.com/tweenjs/tween.js/blob/main/docs/user_guide_zh-CN.md)。
 
+### 2. [headlessui](https://github.com/tailwindlabs/headlessui)
 
+完全无样式、完全可访问的 UI 组件
+
+## Website
+
+### 1. [Pictode](https://www.pictode.com/#/)
+
+最方便集成的绘图工具（[仓库地址](https://github.com/JessYan0913/pictode)）
 
 
 
