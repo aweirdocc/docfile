@@ -134,6 +134,10 @@ QRCode.js 是用于制作 QRCode 的 javascript 库。
 
 汉字拼音转换库
 
+### 11. [@orama/cuid2](https://github.com/oramasearch/cuid2)
+
+生产高质量的唯一ID
+
 ## CSS 
 
 ### 1. Tween.js
