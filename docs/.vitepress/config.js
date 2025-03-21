@@ -28,6 +28,10 @@ function initDocsSidebar() {
         {
           text: 'TypeScript 手册',
           link: 'typescript'
+        },
+        {
+          text: 'RxJS 笔记',
+          link: 'rxjs'
         }
       ]
     },
