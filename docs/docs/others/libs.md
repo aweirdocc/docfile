@@ -138,6 +138,10 @@ QRCode.js 是用于制作 QRCode 的 javascript 库。
 
 生产高质量的唯一ID
 
+### 12. [numbro](https://github.com/BenjaminVanRyseghem/numbro)
+
+用于数字格式化的 JS 库
+
 ## CSS 
 
 ### 1. Tween.js
