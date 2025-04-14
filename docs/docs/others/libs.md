@@ -142,6 +142,10 @@ QRCode.js 是用于制作 QRCode 的 javascript 库。
 
 用于数字格式化的 JS 库
 
+### 13. [Zod](https://github.com/colinhacks/zod)
+
+利用静态类型推断进行 TypeScript 优先模式验证
+
 ## CSS 
 
 ### 1. Tween.js
