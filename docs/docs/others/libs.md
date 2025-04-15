@@ -85,6 +85,10 @@ const { importModule } = await importModule('local-pkg')
 
 语法高亮器
 
+### 5. [Hono](https://github.com/honojs/hono)
+
+Hono 是一个类似于 Express 的简单 Web 应用框架
+
 ## Utils
 
 ### 1. [flglet.js](https://github.com/scottgonzalez/figlet-js)
@@ -145,6 +149,10 @@ QRCode.js 是用于制作 QRCode 的 javascript 库。
 ### 13. [Zod](https://github.com/colinhacks/zod)
 
 利用静态类型推断进行 TypeScript 优先模式验证
+
+### 14. [number-flow](https://github.com/barvian/number-flow)
+
+动画数字组件
 
 ## CSS 
 
