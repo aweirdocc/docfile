@@ -16,7 +16,7 @@
     "vitepress": "^1.0.0-rc.25"
   },
   "engines": {
-		"node": "18.x"
+		"node": "22.x"
 	},
   "dependencies": {
     "gray-matter": "^4.0.3",
