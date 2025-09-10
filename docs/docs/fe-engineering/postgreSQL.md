@@ -1,3 +1,10 @@
+---
+title: PostgreSQL
+titleTemplate: PostgreSQL 使用文档
+description: PostgreSQL 使用文档
+tag: package.json
+---
+
 # PostgreSQL 详细使用文档
 
 ## 目录
