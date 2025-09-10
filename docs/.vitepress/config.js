@@ -60,6 +60,10 @@ function initDocsSidebar() {
         {
           text: '浅尝一下 tsup',
           link: 'tsup'
+        },
+        {
+          text: 'PostgreSQL使用文档',
+          link: 'postgreSQL'
         }
       ]
     },
